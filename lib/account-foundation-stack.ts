@@ -10,7 +10,7 @@ export class AccountFoundationStack extends ExtendedStack {
   constructor(scope: Construct, id: string, props: AccountFoundationStackProps) {
     super(scope, id, props);
 
-    new BackupStack(this, "Backups", {});
+    new BackupStack(this, "Backups");
 
   }
 }

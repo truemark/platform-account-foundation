@@ -1,11 +1,7 @@
 import {Construct} from "constructs";
 import {Duration, NestedStack, NestedStackProps} from "aws-cdk-lib";
-import {BackupPlan, BackupPlanRule, BackupResource} from "aws-cdk-lib/aws-backup";
+import {BackupPlan, BackupPlanRule, BackupResource, BackupVault} from "aws-cdk-lib/aws-backup";
 import {Schedule} from "aws-cdk-lib/aws-events";
-
-export interface BackupStackProps extends NestedStackProps {
-
-}
 
 export class BackupStack extends NestedStack {
 
@@ -53,10 +49,13 @@ export class BackupStack extends NestedStack {
     });
   }
 
-  constructor(scope: Construct, id: string, props: BackupStackProps) {
-    super(scope, id, props);
+  constructor(scope: Construct, id: string) {
+    super(scope, id);
+
+    const backupVault = BackupVault.fromBackupVaultName(this, "DefaultVault", "Default");
 
     const defaultWeek = new BackupPlan(this, "DefaultWeek", {
+      backupVault,
       backupPlanRules: [
         this.daily(7)
       ]
@@ -65,6 +64,7 @@ export class BackupStack extends NestedStack {
 
 
     const defaultMonth = new BackupPlan(this, "DefaultMonth", {
+      backupVault,
       backupPlanRules: [
         this.daily(35)
       ]
@@ -72,6 +72,7 @@ export class BackupStack extends NestedStack {
     this.tagSelection(defaultMonth, "default-month");
 
     const defaultQuarter = new BackupPlan(this, "DefaultQuarter", {
+      backupVault,
       backupPlanRules: [
         this.daily(35),
         this.weekly(90)
@@ -80,6 +81,7 @@ export class BackupStack extends NestedStack {
     this.tagSelection(defaultQuarter, "default-quarter");
 
     const defaultDaily35Weekly90Monthly365 = new BackupPlan(this, "DefaultYear", {
+      backupVault,
       backupPlanRules: [
         this.daily(35),
         this.weekly(90),
@@ -89,6 +91,7 @@ export class BackupStack extends NestedStack {
     this.tagSelection(defaultDaily35Weekly90Monthly365, "default-year");
 
     const defaultDaily35Weekly90Monthly2555 = new BackupPlan(this, "Default7Years", {
+      backupVault,
       backupPlanRules: [
         this.daily(35),
         this.weekly(90),
