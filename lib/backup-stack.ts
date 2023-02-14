@@ -52,7 +52,9 @@ export class BackupStack extends NestedStack {
   constructor(scope: Construct, id: string) {
     super(scope, id);
 
-    const backupVault = BackupVault.fromBackupVaultName(this, "DefaultVault", "Default");
+    const backupVault = new BackupVault(this, "Default", {
+      backupVaultName: "AccountFoundationDefault"
+    });
 
     const defaultWeek = new BackupPlan(this, "DefaultWeek", {
       backupVault,
