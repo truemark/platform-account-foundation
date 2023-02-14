@@ -1,16 +1,16 @@
-import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-// import * as sqs from 'aws-cdk-lib/aws-sqs';
+import {ExtendedStack, ExtendedStackProps} from "truemark-cdk-lib/aws-cdk";
+import {BackupStack} from "./backup-stack";
 
-export class AccountFoundationStack extends cdk.Stack {
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+export interface AccountFoundationStackProps extends ExtendedStackProps {
+
+}
+
+export class AccountFoundationStack extends ExtendedStack {
+  constructor(scope: Construct, id: string, props: AccountFoundationStackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
+    new BackupStack(this, "Backups", {});
 
-    // example resource
-    // const queue = new sqs.Queue(this, 'AccountFoundationQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
   }
 }
